@@ -261,6 +261,13 @@ const shouldScanForAccessibility = (attributes) => {
     return shouldScanTestForAccessibility;
 }
 
+Cypress.Commands.add('performScanIfNeeded', (commandName, win) => {
+  return cy.wrap(
+    performScan(win, { method: commandName }),
+    { timeout: 30000 }
+  );
+});
+
 Cypress.on('command:start', async (command) => {
     if(!command || !command.attributes) return;
     if(command.attributes.name == 'window' || command.attributes.name == 'then' || command.attributes.name == 'wrap') {
@@ -274,10 +281,10 @@ Cypress.on('command:start', async (command) => {
     let shouldScanTestForAccessibility = shouldScanForAccessibility(attributes);
     if (!shouldScanTestForAccessibility) return;
 
-    cy.window().then((win) => {
-        browserStackLog('Performing scan form command ' + command.attributes.name);
-        cy.wrap(performScan(win, {method: command.attributes.name}), {timeout: 30000});
-    })
+  cy.window().then((win) => {
+    browserStackLog(`Performing scan for command ${commandName}`);
+    cy.performScanIfNeeded(commandName, win);
+  });
 })
 
 afterEach(() => {
