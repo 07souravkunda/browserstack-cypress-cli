@@ -282,8 +282,8 @@ Cypress.on('command:start', async (command) => {
     if (!shouldScanTestForAccessibility) return;
 
   cy.window().then((win) => {
-    browserStackLog(`Performing scan for command ${commandName}`);
-    cy.performScanIfNeeded(commandName, win);
+    browserStackLog('Performing scan for command ' + command.attributes.name);
+    cy.performScanIfNeeded(command.attributes.name, win);
   });
 })
 
