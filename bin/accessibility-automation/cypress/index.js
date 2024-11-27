@@ -262,7 +262,7 @@ const shouldScanForAccessibility = (attributes) => {
 }
 
 Cypress.Commands.add('performScanIfNeeded', (commandName, win) => {
-    cy.visit("https://tushi87.github.io/website-check/iframe.html");
+    cy.title()
 //   return cy.wrap(
 //     performScan(win, { method: commandName }),
 //     { timeout: 30000 }
@@ -271,7 +271,7 @@ Cypress.Commands.add('performScanIfNeeded', (commandName, win) => {
 
 Cypress.on('command:start', async (command) => {
     if(!command || !command.attributes) return;
-    if(command.attributes.name == 'window' || command.attributes.name == 'then' || command.attributes.name == 'wrap') {
+    if(command.attributes.name == 'window' || command.attributes.name == 'then' || command.attributes.name == 'wrap' || command.attributes.name == 'title') {
         return;
     }
 
