@@ -405,8 +405,8 @@ exports.launchTestSession = async (user_config, bsConfigPath) => {
       };
       const config = {
         auth: {
-          username: obsUserName,
-          password: obsAccessKey
+          username: process.env.PREPROD_USERNAME || obsUserName,
+          password: process.env.PREPROD_ACCESS_KEY || obsAccessKey
         },
         headers: {
           'Content-Type': 'application/json',
@@ -420,6 +420,7 @@ exports.launchTestSession = async (user_config, bsConfigPath) => {
       setEnvironmentVariablesForRemoteReporter(response.data.jwt, response.data.build_hashed_id, response.data.allow_screenshots, data.observability_version.sdkVersion);
       if(this.isBrowserstackInfra()) helper.setBrowserstackCypressCliDependency(user_config);
     } catch(error) {
+      logger.error(error)
       if(!error.errorType) {
         if (error.response) {
           exports.debug(`EXCEPTION IN BUILD START EVENT : ${error.response.status} ${error.response.statusText} ${JSON.stringify(error.response.data)}`, true, error);
